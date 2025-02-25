@@ -2,18 +2,18 @@ pipeline
 {
 
 agent {
-  label 'DevServer'
+  label 'prod-server'
 }
 
-parameters {
-    choice choices: ['dev', 'prod'], name: 'select_environment'
-}
+// parameters {
+//     choice choices: ['dev', 'prod'], name: 'select_environment'
+// }
 
-environment{
-    NAME = "piyush"
-}
+// environment{
+//     NAME = "piyush"
+// }
 tools {
-  maven 'mymaven'
+  maven 'gb-maven'
 }
 
 stages{
