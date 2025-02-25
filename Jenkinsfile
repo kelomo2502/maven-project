@@ -70,7 +70,6 @@
 
 
 pipeline {
-    // agent { label "prod-server" }  // Uncomment if needed
 
     parameters {
         choice choices: ['dev-server', 'prod-server'], name: 'select_environment'
