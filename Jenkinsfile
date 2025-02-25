@@ -1,6 +1,11 @@
 pipeline {
     agent { label "prod-server" }
 
+    parameters {
+            string defaultValue: 'oyewunmi', name: 'Last_Name'
+    }
+
+
     environment {
         NAME = "gbenga"
     }
