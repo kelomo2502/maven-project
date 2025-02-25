@@ -1,5 +1,9 @@
 pipeline {
     agent { label "prod-server" }
+
+    environment {
+        NAME = "gbenga"
+    }
     
     tools {
         maven "gb-maven"
@@ -9,6 +13,7 @@ pipeline {
         stage("build") {
             steps {
                 sh "mvn clean package"
+                echo "Hello $NAME"
             }
             post {
                 success {
