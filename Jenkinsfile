@@ -18,7 +18,7 @@ pipeline {
         stage("build") {
             steps {
                 sh "mvn clean package"
-                echo "Hello $NAME"
+                echo "Hello $NAME ${params.Last_Name}"
             }
             post {
                 success {
