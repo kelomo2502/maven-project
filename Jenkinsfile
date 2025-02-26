@@ -1,23 +1,19 @@
 pipeline {
-    agent any
-    
+    agent {label "dev-server"}
     parameters {
-        choice(
-            choices: ['dev-server', 'prod-server'], 
-            name: 'select_environment'
-        )
+        choice choices: ['dev-server', 'prod-server'], name: 'select_environment'
     }
-    
+
     environment {
         NAME = "gbenga"
     }
-    
+
     tools {
         maven "gb-maven"
     }
-    
+
     stages {
-        stage("Build") {
+        stage("build") {
             steps {
                 sh "mvn clean package -DskipTests=true"
             }
@@ -27,8 +23,8 @@ pipeline {
                 }
             }
         }
-        
-        stage("Test") {
+
+        stage("test") {
             parallel {
                 stage("Test A") {
                     agent { label "dev-server" }
@@ -38,7 +34,7 @@ pipeline {
                     }
                 }
                 stage("Test B") {
-                    agent { label "prod-server" }
+                    agent { label "dev-server" }
                     steps {
                         echo "This is test B"
                         sh "mvn test"
@@ -53,18 +49,17 @@ pipeline {
                 }
             }
         }
-        
-        stage("Deploy to Dev") {
-            when { expression { params.select_environment == "dev-server" } }
+
+        stage("deploy-dev") {
+            when { expression { params.select_environment == "dev-server" } beforeAgent true }
             agent { label "dev-server" }
             steps {
-                dir("/tmp/deploy") {
+                dir("/var/www/html") {
                     unstash "maven-build"
                 }
                 sh """
-                    sudo cp /tmp/deploy/webapp.war /var/www/html/webapp.war
-                    cd /var/www/html
-                    sudo jar -xvf webapp.war
+                    cd /var/www/html/
+                    jar -xvf webapp.war
                 """
             }
         }
