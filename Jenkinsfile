@@ -51,8 +51,9 @@ pipeline {
         }
 
         stage("deploy-dev") {
-            when { expression { params.select_environment == "dev-server" } beforeAgent true }
+            when { expression { params.select_environment == "dev-server" } }
             agent { label "dev-server" }
+            options { beforeAgent true }
             steps {
                 dir("/var/www/html") {
                     unstash "maven-build"
