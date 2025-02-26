@@ -51,7 +51,8 @@ pipeline {
         }
 
         stage("deploy-dev") {
-            when { expression { params.select_environment == "dev-server" } }
+            when { expression { params.select_environment == "dev-server" }
+            beforeAgent true}
             agent { label "dev-server" }
             steps {
                 dir("/var/www/html") {
